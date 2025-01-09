@@ -7,6 +7,7 @@ import AddMovie from './pages/AddMovie';
 import EditMovie from './pages/EditMovie';
 import AuthModal from './components/AuthModal';
 import SplashScreen from './components/SplashScreen';
+import Spotlight from './components/Spotlight';
 
 function PrivateRoute({ children }) {
   const { user, setShowAuthModal } = useAuth();
@@ -22,10 +23,23 @@ function PrivateRoute({ children }) {
 function AppContent() {
   const { showAuthModal, setShowAuthModal } = useAuth();
   const [showSplashScreen, setShowSplashScreen] = useState(true);
+  const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
 
   const handleSplashComplete = () => {
     setShowSplashScreen(false);
   };
+
+  const handleKeyPress = (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      setIsSpotlightOpen(true);
+    }
+  };
+
+  React.useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -33,7 +47,7 @@ function AppContent() {
         <SplashScreen onComplete={handleSplashComplete} />
       ) : (
         <>
-          <Navbar />
+          <Navbar onSpotlightOpen={() => setIsSpotlightOpen(true)} />
           
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <Routes>
@@ -60,6 +74,10 @@ function AppContent() {
           {showAuthModal && (
             <AuthModal onClose={() => setShowAuthModal(false)} />
           )}
+          <Spotlight
+            isOpen={isSpotlightOpen}
+            onClose={() => setIsSpotlightOpen(false)}
+          />
         </>
       )}
     </div>

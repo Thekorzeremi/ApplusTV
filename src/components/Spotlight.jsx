@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/24/solid';
+import { useAuth } from '../contexts/AuthContext';
 import MovieModal from './MovieModal';
+import { createPortal } from 'react-dom';
 
-function Spotlight({ movies, isOpen, onClose }) {
+function Spotlight({ isOpen, onClose }) {
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -43,12 +46,12 @@ function Spotlight({ movies, isOpen, onClose }) {
     }
   }, [isOpen, onClose, selectedIndex, selectedMovie]);
 
-  const filteredMovies = movies.filter(movie =>
+  const filteredMovies = (user?.movies || []).filter(movie =>
     movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     movie.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  return (
+  const spotlight = (
     <AnimatePresence>
       {isOpen && (
         <>
@@ -57,16 +60,16 @@ function Spotlight({ movies, isOpen, onClose }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
-          />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="fixed left-1/2 top-20 -translate-x-1/2 w-full max-w-2xl z-50"
+            className="fixed inset-0 bg-black backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
           >
-            <div className="mx-4">
-              <div className="bg-zinc-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-2xl"
+            >
+              <div className="bg-zinc-900 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10">
                 <div className="relative">
                   <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/40" />
                   <input
@@ -140,18 +143,20 @@ function Spotlight({ movies, isOpen, onClose }) {
                   </div>
                 )}
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          <MovieModal
-            movie={selectedMovie}
-            isOpen={!!selectedMovie}
-            onClose={() => setSelectedMovie(null)}
-          />
+            <MovieModal
+              movie={selectedMovie}
+              isOpen={!!selectedMovie}
+              onClose={() => setSelectedMovie(null)}
+            />
+          </motion.div>
         </>
       )}
     </AnimatePresence>
   );
+
+  return createPortal(spotlight, document.body);
 }
 
 export default Spotlight;

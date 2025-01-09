@@ -23,19 +23,19 @@ function ProfileModal({ isOpen, onClose }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999]"
+          className="fixed inset-0 bg-black backdrop-blur-sm z-[9999]"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             onClick={(e) => e.stopPropagation()}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-zinc-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden mx-4"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-zinc-900 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden mx-4"
           >
             {/* En-tête avec gradient et avatar */}
             <div className="relative">
               <div className="h-32 bg-gradient-to-br from-purple-600 via-blue-600 to-violet-600">
-                <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
+                <div className="absolute inset-0 bg-black backdrop-blur-sm" />
               </div>
               <div className="absolute top-4 right-4 flex items-center gap-2">
                 {!isEditing && (
@@ -84,7 +84,7 @@ function ProfileModal({ isOpen, onClose }) {
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
+                      className="w-full px-4 py-2 bg-white border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
                       required
                     />
                   </div>
@@ -97,7 +97,7 @@ function ProfileModal({ isOpen, onClose }) {
                       type="url"
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
-                      className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
+                      className="w-full px-4 py-2 bg-white border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
                       placeholder="https://..."
                     />
                   </div>

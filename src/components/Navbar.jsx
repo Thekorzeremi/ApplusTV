@@ -5,22 +5,9 @@ import { PlusIcon, UserCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/
 import Spotlight from './Spotlight';
 import ProfileModal from './ProfileModal';
 
-function Navbar() {
+function Navbar({ onSpotlightOpen }) {
   const { user, logout, setShowAuthModal } = useAuth();
-  const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-
-  const handleKeyPress = (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-      e.preventDefault();
-      setIsSpotlightOpen(true);
-    }
-  };
-
-  React.useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
 
   return (
     <nav className="bg-zinc-900/50 backdrop-blur-xl border-b border-white/10 sticky top-0 z-40">
@@ -34,7 +21,7 @@ function Navbar() {
 
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => setIsSpotlightOpen(true)}
+              onClick={onSpotlightOpen}
               className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
               title="Rechercher (Ctrl+K)"
             >
@@ -77,12 +64,6 @@ function Navbar() {
           </div>
         </div>
       </div>
-
-      <Spotlight
-        isOpen={isSpotlightOpen}
-        onClose={() => setIsSpotlightOpen(false)}
-        movies={user?.movies || []}
-      />
 
       <ProfileModal
         isOpen={isProfileOpen}

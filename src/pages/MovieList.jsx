@@ -208,7 +208,7 @@ function MovieList() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 z-0"
       >
         {sortedMovies.map((movie) => (
           <div key={movie.id} onClick={() => setSelectedMovie(movie)}>
